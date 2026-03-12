@@ -25,6 +25,19 @@ function createWindow() {
   // Load the app
   if (process.env.VITE_DEV_SERVER_URL) {
     win.loadURL(process.env.VITE_DEV_SERVER_URL);
+
+    // Support DevTools hotkeys in development
+    win.webContents.on('before-input-event', (event, input) => {
+      const isCmdOrCtrl = input.control || input.meta;
+      const isDevToolsKey = (isCmdOrCtrl && input.shift && input.key.toLowerCase() === 'i') ||
+        (isCmdOrCtrl && input.alt && input.key.toLowerCase() === 'i') ||
+        input.key === 'F12';
+
+      if (input.type === 'keyDown' && isDevToolsKey) {
+        win.webContents.toggleDevTools();
+        event.preventDefault();
+      }
+    });
   } else {
     win.loadFile(path.join(__dirname, '../index.html'));
   }
