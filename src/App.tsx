@@ -65,9 +65,11 @@ const App: React.FC = () => {
                     <img src="logo.png" alt="HandyMedia Logo" className="app-logo" />
                 </div>
                 <h1>HandyMedia</h1>
-                <p>Your friendly media multi-tool</p>
-            </header>
-
+          <div className="tool-intro">
+            <p>Bypass YouTube Shorts and convert vertical videos to landscape.</p>
+            <p className="tool-usage">Adding pads to your portrait videos forces YouTube to treat them as regular videos rather than Shorts. Select your file, pick a destination, and stay in control of your uploads.</p>
+          </div>
+        </header>
             <main>
                 {state === 'selection' && (
                     <div id="selection-state" className="state-container">
