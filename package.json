@@ -1,23 +1,31 @@
 {
   "name": "handymedia",
   "version": "1.0.0",
-  "main": "dist/main.js",
+  "main": "dist-electron/main.js",
   "license": "MIT",
   "scripts": {
-    "build": "tsc",
-    "start": "yarn build && electron .",
-    "watch": "tsc -w"
+    "dev": "vite",
+    "build": "tsc && vite build",
+    "preview": "vite preview"
   },
   "dependencies": {
     "electron": "^31.0.0",
     "ffmpeg-static": "^5.2.0",
-    "fluent-ffmpeg": "^2.1.2"
+    "fluent-ffmpeg": "^2.1.2",
+    "react": "^19.2.4",
+    "react-dom": "^19.2.4"
   },
   "devDependencies": {
     "@types/ffmpeg-static": "^5.1.0",
     "@types/fluent-ffmpeg": "^2.1.28",
     "@types/node": "^25.3.2",
+    "@types/react": "^19.2.14",
+    "@types/react-dom": "^19.2.3",
+    "@vitejs/plugin-react": "^5.1.4",
     "ts-node": "^10.9.2",
-    "typescript": "^5.9.3"
+    "typescript": "^5.9.3",
+    "vite": "^7.3.1",
+    "vite-plugin-electron": "^0.29.0",
+    "vite-plugin-electron-renderer": "^0.14.6"
   }
 }

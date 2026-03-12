@@ -10,64 +10,7 @@
     <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;600&display=swap" rel="stylesheet">
 </head>
 <body>
-    <div class="app-container">
-        <header>
-            <div class="logo-container">
-                <img src="logo.png" alt="HandyMedia Logo" class="app-logo">
-            </div>
-            <h1>HandyMedia</h1>
-            <p>Your friendly media multi-tool</p>
-        </header>
-
-        <main>
-            <!-- Select State -->
-            <div id="selection-state" class="state-container">
-                <div class="card">
-                    <div class="input-group">
-                        <label>Source Video</label>
-                        <div class="file-picker-row">
-                            <button id="btn-select-file" class="btn-secondary">Choose File</button>
-                            <span id="selected-file-path" class="path-display">No file selected</span>
-                        </div>
-                    </div>
-
-                    <div class="input-group">
-                        <label>Target Folder</label>
-                        <div class="file-picker-row">
-                            <button id="btn-select-folder" class="btn-secondary">Choose Folder</button>
-                            <span id="selected-folder-path" class="path-display">No folder selected</span>
-                        </div>
-                    </div>
-
-                    <button id="btn-convert" class="btn-primary" disabled>Convert to Landscape</button>
-                </div>
-            </div>
-
-            <!-- Progress State -->
-            <div id="progress-state" class="state-container hidden">
-                <div class="card centered">
-                    <div class="loader"></div>
-                    <h2>Converting...</h2>
-                    <div class="progress-wrapper">
-                        <div class="progress-bar">
-                            <div id="progress-fill" class="progress-fill" style="width: 0%"></div>
-                        </div>
-                        <span id="progress-text">0%</span>
-                    </div>
-                </div>
-            </div>
-
-            <!-- Success State -->
-            <div id="success-state" class="state-container hidden">
-                <div class="card centered">
-                    <div class="success-icon">✓</div>
-                    <h2>Conversion Complete!</h2>
-                    <p id="output-path" class="path-display"></p>
-                    <button id="btn-reset" class="btn-primary">Convert Another File</button>
-                </div>
-            </div>
-        </main>
-    </div>
-    <script src="dist/renderer.js"></script>
+    <div id="root"></div>
+    <script type="module" src="/src/main-renderer.tsx"></script>
 </body>
 </html>
