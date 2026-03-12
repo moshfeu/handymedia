@@ -8,6 +8,16 @@ const App: React.FC = () => {
     const [targetFolder, setTargetFolder] = useState<string | null>(null);
     const [progress, setProgress] = useState(0);
     const [resultPath, setResultPath] = useState('');
+  const [updateStatus, setUpdateStatus] = useState<'none' | 'available' | 'downloaded'>('none');
+
+  useEffect(() => {
+    const unsubAvailable = window.electronAPI.onUpdateAvailable(() => setUpdateStatus('available'));
+    const unsubDownloaded = window.electronAPI.onUpdateDownloaded(() => setUpdateStatus('downloaded'));
+    return () => {
+      if (typeof unsubAvailable === 'function') unsubAvailable();
+      if (typeof unsubDownloaded === 'function') unsubDownloaded();
+    };
+  }, []);
 
     useEffect(() => {
         const removeListener = window.electronAPI.onProgress((percent: number) => {
@@ -58,8 +68,24 @@ const App: React.FC = () => {
         setProgress(0);
     };
 
+  const handleRestart = () => {
+    window.electronAPI.restartApp();
+  };
+
     return (
         <div className="app-container">
+        {updateStatus !== 'none' && (
+          <div className="update-notification">
+            {updateStatus === 'available' ? (
+              <span>✨ A new update is being downloaded...</span>
+            ) : (
+              <>
+                <span>🚀 Update ready!</span>
+                <button onClick={handleRestart} className="btn-update">Restart to Install</button>
+              </>
+            )}
+          </div>
+        )}
             <header>
                 <div className="logo-container">
                     <img src="logo.png" alt="HandyMedia Logo" className="app-logo" />

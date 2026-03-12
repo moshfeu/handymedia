@@ -78,12 +78,12 @@ header p {
     font-size: 1.1rem;
       line-height: 1.5;
     }
-    
+
     .tool-intro {
       max-width: 500px;
       margin: 0 auto;
     }
-    
+
     .tool-usage {
       margin-top: 0.75rem;
       font-size: 0.95rem !important;
@@ -254,4 +254,52 @@ label {
     border-radius: 8px;
     margin: 1.5rem 0;
     width: 100%;
+}
+
+.update-notification {
+  position: fixed;
+  top: 20px;
+  left: 50%;
+  transform: translateX(-50%);
+  background: var(--primary);
+  color: white;
+  padding: 0.75rem 1.5rem;
+  border-radius: 50px;
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.2);
+  z-index: 1000;
+  font-weight: 500;
+  animation: slideDown 0.3s ease-out;
+}
+
+.btn-update {
+  background: white;
+  color: var(--primary);
+  border: none;
+  padding: 0.4rem 1rem;
+  border-radius: 20px;
+  font-weight: 600;
+  font-size: 0.8rem;
+  cursor: pointer;
+  transition: all 0.2s;
+  -webkit-app-region: no-drag;
+}
+
+.btn-update:hover {
+  background: var(--text-main);
+  transform: scale(1.05);
+}
+
+@keyframes slideDown {
+  from {
+    transform: translate(-50%, -100%);
+    opacity: 0;
+  }
+
+  to {
+    transform: translate(-50%, 0);
+    opacity: 1;
+  }
 }

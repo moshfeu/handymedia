@@ -1,4 +1,5 @@
 import { app, BrowserWindow, ipcMain, dialog } from 'electron';
+import { autoUpdater } from 'electron-updater';
 import * as path from 'path';
 import ffmpeg from 'fluent-ffmpeg';
 import ffmpegInstaller from 'ffmpeg-static';
@@ -27,7 +28,22 @@ function createWindow() {
   } else {
     win.loadFile(path.join(__dirname, '../index.html'));
   }
+
+  // Auto-updater listeners
+  autoUpdater.checkForUpdatesAndNotify();
+
+  autoUpdater.on('update-available', () => {
+    win.webContents.send('update-available');
+  });
+
+  autoUpdater.on('update-downloaded', () => {
+    win.webContents.send('update-downloaded');
+  });
 }
+
+ipcMain.handle('restart-app', () => {
+  autoUpdater.quitAndInstall();
+});
 
 app.whenReady().then(createWindow);
 

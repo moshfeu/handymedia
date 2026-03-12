@@ -6,5 +6,8 @@ declare interface Window {
     selectFolder: () => Promise<string | undefined>;
     startConversion: (data: { filePath: string; targetFolder: string }) => Promise<string>;
     onProgress: (callback: (percent: number) => void) => () => void;
+    onUpdateAvailable: (callback: () => void) => () => void;
+    onUpdateDownloaded: (callback: () => void) => () => void;
+    restartApp: () => Promise<void>;
   };
 }
