@@ -1,14 +1,23 @@
 {
   "name": "handymedia",
   "version": "1.0.0",
-  "main": "main.js",
+  "main": "dist/main.js",
   "license": "MIT",
   "scripts": {
-    "start": "electron ."
+    "build": "tsc",
+    "start": "yarn build && electron .",
+    "watch": "tsc -w"
   },
   "dependencies": {
     "electron": "^31.0.0",
     "ffmpeg-static": "^5.2.0",
     "fluent-ffmpeg": "^2.1.2"
+  },
+  "devDependencies": {
+    "@types/ffmpeg-static": "^5.1.0",
+    "@types/fluent-ffmpeg": "^2.1.28",
+    "@types/node": "^25.3.2",
+    "ts-node": "^10.9.2",
+    "typescript": "^5.9.3"
   }
 }

@@ -1,11 +1,12 @@
-const { app, BrowserWindow, ipcMain, dialog } = require('electron');
-const path = require('path');
-const ffmpeg = require('fluent-ffmpeg');
-const ffmpegInstaller = require('ffmpeg-static');
-const fs = require('fs');
+import { app, BrowserWindow, ipcMain, dialog } from 'electron';
+import * as path from 'path';
+import ffmpeg from 'fluent-ffmpeg';
+import ffmpegInstaller from 'ffmpeg-static';
 
 // Set ffmpeg path to the bundled static binary
-ffmpeg.setFfmpegPath(ffmpegInstaller);
+if (ffmpegInstaller) {
+  ffmpeg.setFfmpegPath(ffmpegInstaller);
+}
 
 function createWindow() {
   const win = new BrowserWindow({
@@ -20,7 +21,7 @@ function createWindow() {
     backgroundColor: '#1a1612'
   });
 
-  win.loadFile('index.html');
+  win.loadFile(path.join(__dirname, '../index.html'));
 }
 
 app.whenReady().then(createWindow);
@@ -37,7 +38,7 @@ app.on('activate', () => {
 ipcMain.handle('select-file', async () => {
   const result = await dialog.showOpenDialog({
     properties: ['openFile'],
-    filters: [{ name: 'Videos', extensions: ['mp4', 'mov', 'm4v', 'kv'] }]
+    filters: [{ name: 'Videos', extensions: ['mp4', 'mov', 'm4v', 'mkv'] }]
   });
   return result.filePaths[0];
 });
@@ -50,8 +51,13 @@ ipcMain.handle('select-folder', async () => {
   return result.filePaths[0];
 });
 
+interface ConversionParams {
+  filePath: string;
+  targetFolder: string;
+}
+
 // Handle conversion
-ipcMain.handle('start-conversion', async (event, { filePath, targetFolder }) => {
+ipcMain.handle('start-conversion', async (event, { filePath, targetFolder }: ConversionParams) => {
   const fileName = path.basename(filePath, path.extname(filePath));
   const outputPath = path.join(targetFolder, `${fileName}_landscape.mp4`);
 
@@ -61,10 +67,10 @@ ipcMain.handle('start-conversion', async (event, { filePath, targetFolder }) => 
         '-vf', 'scale=1920:1080:force_original_aspect_ratio=decrease,pad=1920:1080:(ow-iw)/2:(oh-ih)/2:black',
         '-c:a', 'copy'
       ])
-      .on('progress', (progress) => {
+      .on('progress', (progress: any) => {
         event.sender.send('conversion-progress', progress.percent);
       })
-      .on('error', (err) => {
+      .on('error', (err: Error) => {
         reject(err.message);
       })
       .on('end', () => {

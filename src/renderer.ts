@@ -1,20 +1,20 @@
-const btnSelectFile = document.getElementById('btn-select-file');
-const btnSelectFolder = document.getElementById('btn-select-folder');
-const btnConvert = document.getElementById('btn-convert');
-const btnReset = document.getElementById('btn-reset');
+const btnSelectFile = document.getElementById('btn-select-file') as HTMLButtonElement;
+const btnSelectFolder = document.getElementById('btn-select-folder') as HTMLButtonElement;
+const btnConvert = document.getElementById('btn-convert') as HTMLButtonElement;
+const btnReset = document.getElementById('btn-reset') as HTMLButtonElement;
 
-const selectedFilePath = document.getElementById('selected-file-path');
-const selectedFolderPath = document.getElementById('selected-folder-path');
-const progressFill = document.getElementById('progress-fill');
-const progressText = document.getElementById('progress-text');
-const outputPathDisplay = document.getElementById('output-path');
+const selectedFilePath = document.getElementById('selected-file-path') as HTMLSpanElement;
+const selectedFolderPath = document.getElementById('selected-folder-path') as HTMLSpanElement;
+const progressFill = document.getElementById('progress-fill') as HTMLDivElement;
+const progressText = document.getElementById('progress-text') as HTMLSpanElement;
+const outputPathDisplay = document.getElementById('output-path') as HTMLParagraphElement;
 
-const selectionState = document.getElementById('selection-state');
-const progressState = document.getElementById('progress-state');
-const successState = document.getElementById('success-state');
+const selectionState = document.getElementById('selection-state') as HTMLDivElement;
+const progressState = document.getElementById('progress-state') as HTMLDivElement;
+const successState = document.getElementById('success-state') as HTMLDivElement;
 
-let filePath = null;
-let targetFolder = null;
+let filePath: string | null = null;
+let targetFolder: string | null = null;
 
 function updateConvertButton() {
     btnConvert.disabled = !(filePath && targetFolder);
@@ -24,7 +24,7 @@ btnSelectFile.addEventListener('click', async () => {
     const path = await window.electronAPI.selectFile();
     if (path) {
         filePath = path;
-        selectedFilePath.textContent = path.split('/').pop();
+        selectedFilePath.textContent = path.split('/').pop() || 'Unknown file';
         selectedFilePath.title = path;
         updateConvertButton();
     }
@@ -41,6 +41,8 @@ btnSelectFolder.addEventListener('click', async () => {
 });
 
 btnConvert.addEventListener('click', async () => {
+    if (!filePath || !targetFolder) return;
+
     selectionState.classList.add('hidden');
     progressState.classList.remove('hidden');
 
@@ -68,7 +70,7 @@ btnReset.addEventListener('click', () => {
 });
 
 window.electronAPI.onProgress((percent) => {
-    if (percent) {
+    if (percent !== undefined) {
         const rounded = Math.round(percent);
         progressFill.style.width = `${rounded}%`;
         progressText.textContent = `${rounded}%`;
