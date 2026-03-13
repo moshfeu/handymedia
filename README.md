@@ -1,32 +1,51 @@
-# 🍯 HandyMedia (Landscape Converter)
-
-A beautiful and blazingly fast desktop application designed to bypass YouTube shorts and other platform requirements by converting portrait (vertical) videos into a 16:9 landscape format. It adds sleek padding—perfect for content creators who need ultimate flexibility.
+# 🍯 HandyMedia
 
 ![HandyMedia Preview]() *(You can add a screenshot later)*
 
-## 🚀 Features
+Welcome to HandyMedia! This document is split into two sections depending on what you're looking for:
 
-- **Side-by-Side Preview**: Instantly preview exactly how your video will look with padding before converting. Includes a professional checkerboard background to visualize transparency vs. solid black.
-- **Drag-and-Drop simplicity**: No need to fiddle with complex file menus. Just drag your video over the app and drop it!
-- **Dynamic Window Resizing**: A UI that feels native. The application automatically grows and shrinks depending on whether a preview is currently presented or not.
-- **FFmpeg Under the Hood**: Leverage the robust power of FFmpeg without needing terminal experience. Everything is handled locally inside the application.
-- **Accessibility Friendly**: Complete keyboard interaction and screen-reader compliant flows.
-- **Auto Update**: Keeps itself up-to-date automatically using GitHub Releases.
+1. [For End Users](#for-end-users): Explains what the app does and how it helps you.
+2. [For Developers](#for-developers): Explains how the app is built and how to run it.
 
-## 🛠️ Built With
+---
 
-- **React + Vite**: For a snappy, modern UI component framework.
-- **TypeScript**: Ensuring scalable and bug-free code.
-- **Electron**: Bringing the web to the desktop with low overhead and deep OS integration.
-- **Vanilla CSS**: Used native CSS nesting and custom variables for a rich "Honey" theme, completely independent of heavy UI libraries.
+## 🙋 For End Users
 
-## 📦 Getting Started
+### The Problem
+Have you ever tried to upload a video to a platform, but it didn't fit right? Many short-form platforms (like TikTok or YouTube Shorts) force your videos to be "vertical" (tall like a phone screen). But sometimes, you want to share these videos on platforms or screens that expect "landscape" (wide like a TV) videos. If you just upload a tall video to a wide screen, parts of your video might get awkwardly zoomed in or cut off.
 
-### Prerequisites
+### The Solution: HandyMedia
+HandyMedia is a simple desktop app designed to bypass these annoying formatting rules. It takes your tall, vertical videos and instantly transforms them into standard 16:9 wide videos.
 
-Ensure you have [Node.js](https://nodejs.org/) and [Yarn](https://yarnpkg.com/) installed on your machine.
+How? It intelligently calculates the perfect measurements and adds sleek, solid **black bars** (padding) to the left and right sides of your video. This means your entire original video is preserved perfectly in the center, and it's now wrapped in a widely-accepted landscape format.
 
-### Installation
+### How to Use It
+It's designed to be incredibly easy:
+1. **Drag and Drop:** Grab a video file on your computer and drag it right into the app window.
+2. **Preview:** The app immediately shows you a "Before and After" picture. You'll see a checkerboard pattern showing empty space turning into black padding.
+3. **Choose Save Location:** Click "Choose Folder" to decide where the new, fixed video should be saved.
+4. **Convert:** Hit "Convert to Landscape" and watch the progress bar.
+5. **Done!** Click the output link to instantly open the folder containing your brand new, wide video.
+
+No complex settings, no confusing menus. Just drop, review, and convert.
+
+---
+
+## 🛠️ For Developers
+
+Welcome! If you're looking to fiddle with the code, build the app yourself, or contribute, here is everything you need to know about what's going on under the hood.
+
+### Tech Stack
+- **Frontend Framework:** React + Vite
+- **Language:** TypeScript
+- **Desktop Wrapper:** Electron
+- **Media Processing:** FFmpeg (via `fluent-ffmpeg` and bundled `ffmpeg-static`)
+- **Styling:** Vanilla CSS with custom variables and native nesting (No bulky component libraries).
+- **Auto-Update:** Handled natively via `electron-updater` and GitHub Releases.
+
+### Getting Started
+
+Ensure you have [Node.js](https://nodejs.org/) and [Yarn](https://yarnpkg.com/) installed.
 
 1. Clone the repository:
    ```bash
@@ -40,40 +59,26 @@ Ensure you have [Node.js](https://nodejs.org/) and [Yarn](https://yarnpkg.com/) 
    ```
 
 ### Running Locally
-
-To start the development server with Hot Module Replacement (HMR):
+To start the development server with Hot Module Replacement (HMR). This is what you should use to develop UI/logic changes:
 ```bash
 yarn start
 ```
 
-## 🔨 Build & Distribution
+### Build & Distribution Commands
 
-To create a production-ready application that you can run on your machine without packaging:
-```bash
-yarn local-pack
-```
-This will compile the source code, pack the app, and place the executable inside the `dist_build` folder (`mac-arm64` etc.).
+- **`yarn build`**: Compiles the TypeScript and Vite assets for production (`dist` and `dist-electron`). Run this to verify your code compiles.
+- **`yarn local-pack`**: Compiles the code AND creates a local executable inside the `dist_build` folder (`mac-arm64` etc.) using Electron Builder. Use this to quickly test exactly what the final production `.app` looks and behaves like on your machine.
+- **`yarn pack`**: Wraps the code into a distribution-ready installer/archive (like `.dmg` or `.tgz`).
+- **`yarn publish`**: Instructs Electron Builder to build and push the releases directly to GitHub.
 
-To manually test the build target prior to packaging:
-```bash
-yarn build
-```
+### CI/CD Pipeline
+GitHub Actions are configured out-of-the-box in `.github/workflows/releaser.yml`.
+Whenever you push a tag (e.g., `v1.0.0`) to the `main` branch, the workflow will automatically:
+1. Fire up environments for Mac, Windows, and Linux.
+2. Build the app binaries.
+3. Publish them to the GitHub Releases page.
 
-To create a distribution-ready `.tgz`, `.dmg`, or equivalent installer across OS platforms:
-```bash
-yarn pack
-```
-
-*Note: GitHub Actions are configured out-of-the-box (`.github/workflows/releaser.yml`) to automatically build and publish a release whenever a new tag is pushed.*
-
-## 📖 How to Use
-
-1. **Select the Source Video:** Drag an `.mp4`, `.mov`, `.mkv` or `.m4v` into the app.
-2. **Review:** The system extracts the first frame to supply a clear before-and-after shot.
-3. **Select Target Output:** Pick a save location.
-4. **Convert:** Hit 'Convert to Landscape' and watch the progress bar zip along.
-5. **Open:** Click the resulting path on the success screen, and Finder/Explorer will open right alongside it!
-
-## 📜 License
-
-This project is licensed under the MIT License. See the `package.json` file for more details.
+### Important Structure Notes
+- **`src/main.ts`**: The Electron main process. Handles window creation, filesystem access, and the heavy FFmpeg `spawn` background task.
+- **`src/preload.ts`**: The context bridge securing the connection to the renderer.
+- **`src/App.tsx`**: The main React view handling all states (Selection, Progress, Success).
