@@ -12,20 +12,18 @@ Welcome to HandyMedia! This document is split into two sections depending on wha
 ## 🙋 For End Users
 
 ### The Problem
-Have you ever tried to upload a video to a platform, but it didn't fit right? Many short-form platforms (like TikTok or YouTube Shorts) force your videos to be "vertical" (tall like a phone screen). But sometimes, you want to share these videos on platforms or screens that expect "landscape" (wide like a TV) videos. If you just upload a tall video to a wide screen, parts of your video might get awkwardly zoomed in or cut off.
-
 ### The Solution: HandyMedia
-HandyMedia is a simple desktop app designed to bypass these annoying formatting rules. It takes your tall, vertical videos and instantly transforms them into standard 16:9 wide videos.
+HandyMedia is a desktop app designed to bypass these formatting rules. It converts your tall, vertical videos into standard 16:9 wide videos.
 
-How? It intelligently calculates the perfect measurements and adds sleek, solid **black bars** (padding) to the left and right sides of your video. This means your entire original video is preserved perfectly in the center, and it's now wrapped in a widely-accepted landscape format.
+It calculates the necessary measurements and adds solid **black bars** (padding) to the left and right sides of your video. This means your original video is preserved in the center, and it is now wrapped in a landscape format.
 
 ### How to Use It
-It's designed to be incredibly easy:
-1. **Drag and Drop:** Grab a video file on your computer and drag it right into the app window.
-2. **Preview:** The app immediately shows you a "Before and After" picture. You'll see a checkerboard pattern showing empty space turning into black padding.
-3. **Choose Save Location:** Click "Choose Folder" to decide where the new, fixed video should be saved.
-4. **Convert:** Hit "Convert to Landscape" and watch the progress bar.
-5. **Done!** Click the output link to instantly open the folder containing your brand new, wide video.
+It's designed to be simple:
+1. **Drag and Drop:** Grab a video file on your computer and drag it into the app window.
+2. **Preview:** The app shows you a "Before and After" picture. You'll see a checkerboard pattern showing empty space turning into black padding.
+3. **Choose Save Location:** Click "Choose Folder" to decide where the converted video should be saved.
+4. **Convert:** Hit "Convert to Landscape" and wait for the progress bar to complete.
+5. **Done!** Click the output link to open the folder containing your new video.
 
 No complex settings, no confusing menus. Just drop, review, and convert.
 
@@ -49,7 +47,7 @@ Ensure you have [Node.js](https://nodejs.org/) and [Yarn](https://yarnpkg.com/) 
 
 1. Clone the repository:
    ```bash
-   git clone <repository-url>
+   git clone https://github.com/moshfeu/landscape-converter.git
    cd landscape-converter
    ```
 
