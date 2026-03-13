@@ -54,6 +54,7 @@ const App: React.FC = () => {
         try {
             const result = await window.electronAPI.generatePreview(path);
             setPreview(result);
+            window.electronAPI.resizeWindow(900, 850); // Expand for preview
         } catch (error) {
             console.error('Preview error:', error);
             setPreview(null);
@@ -123,6 +124,7 @@ const App: React.FC = () => {
         setPreview(null);
         setState('selection');
         setProgress(0);
+        window.electronAPI.resizeWindow(900, 700); // Shrink back
     };
 
     const handleRestart = () => {

@@ -66,6 +66,13 @@ ipcMain.handle('restart-app', () => {
   autoUpdater.quitAndInstall();
 });
 
+ipcMain.on('resize-window', (event, width, height) => {
+  const win = BrowserWindow.fromWebContents(event.sender);
+  if (win) {
+    win.setSize(width, height, true);
+  }
+});
+
 app.whenReady().then(createWindow);
 
 app.on('window-all-closed', () => {

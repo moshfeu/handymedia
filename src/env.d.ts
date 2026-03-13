@@ -10,5 +10,6 @@ declare interface Window {
     onUpdateDownloaded: (callback: () => void) => () => void;
     restartApp: () => Promise<void>;
     generatePreview: (filePath: string) => Promise<{ original: string; padded: string }>;
+    resizeWindow: (width: number, height: number) => void;
   };
 }
