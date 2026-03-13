@@ -1,6 +1,6 @@
 {
   "name": "handymedia",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "Bypass YouTube Shorts by converting portrait videos to landscape with padded black bars.",
   "author": "Mosh Feu",
   "main": "dist-electron/main.js",
