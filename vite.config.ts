@@ -11,6 +11,13 @@ export default defineConfig({
     electron([
       {
         entry: 'src/main.ts',
+        vite: {
+          build: {
+            rollupOptions: {
+              external: ['ffmpeg-static', 'fluent-ffmpeg'],
+            },
+          },
+        },
       },
       {
         entry: 'src/preload.ts',

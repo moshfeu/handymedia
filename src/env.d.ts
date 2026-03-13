@@ -9,5 +9,6 @@ declare interface Window {
     onUpdateAvailable: (callback: () => void) => () => void;
     onUpdateDownloaded: (callback: () => void) => () => void;
     restartApp: () => Promise<void>;
+    generatePreview: (filePath: string) => Promise<{ original: string; padded: string }>;
   };
 }

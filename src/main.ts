@@ -1,12 +1,33 @@
 import { app, BrowserWindow, ipcMain, dialog } from 'electron';
 import { autoUpdater } from 'electron-updater';
 import * as path from 'path';
+import { PassThrough } from 'stream';
 import ffmpeg from 'fluent-ffmpeg';
 import ffmpegInstaller from 'ffmpeg-static';
 
 // Set ffmpeg path to the bundled static binary
-if (ffmpegInstaller) {
-  ffmpeg.setFfmpegPath(ffmpegInstaller);
+const getFfmpegPath = () => {
+    if (!ffmpegInstaller) return null;
+
+    // In dev mode, use the node_modules path directly if possible
+    if (process.env.VITE_DEV_SERVER_URL) {
+        if (typeof ffmpegInstaller === 'string' && path.isAbsolute(ffmpegInstaller)) {
+            return ffmpegInstaller;
+        }
+        return path.join(process.cwd(), 'node_modules', 'ffmpeg-static', 'ffmpeg');
+    }
+
+    // In production (Electron build), the path might be changed
+    // or we might need to point to the app.asar.unpacked directory
+    return ffmpegInstaller.replace('app.asar', 'app.asar.unpacked');
+};
+
+const finalFfmpegPath = getFfmpegPath();
+console.log('[FFMPEG] Path resolved to:', finalFfmpegPath);
+if (finalFfmpegPath) {
+    ffmpeg.setFfmpegPath(finalFfmpegPath);
+} else {
+    console.error('[FFMPEG] Failed to resolve ffmpeg path during startup');
 }
 
 function createWindow() {
@@ -99,4 +120,43 @@ ipcMain.handle('start-conversion', async (event, { filePath, targetFolder }: Con
       })
       .save(outputPath);
   });
+});
+
+ipcMain.handle('generate-preview', async (event, filePath) => {
+  const getFrame = (filters: string[]): Promise<string> => {
+    return new Promise((resolve, reject) => {
+      const chunks: Buffer[] = [];
+      const stream = new PassThrough();
+
+      stream.on('data', (chunk: Buffer) => chunks.push(chunk));
+      stream.on('end', () => {
+        const buffer = Buffer.concat(chunks);
+        resolve(`data:image/jpeg;base64,${buffer.toString('base64')}`);
+      });
+      stream.on('error', reject);
+
+      ffmpeg(filePath)
+        .outputOptions([
+          '-frames:v', '1',
+          '-vf', filters.join(','),
+          '-f', 'image2pipe',
+          '-vcodec', 'mjpeg'
+        ])
+        .on('error', (err: Error) => {
+          console.error('ffmpeg error:', err);
+          reject(err);
+        })
+        .pipe(stream, { end: true });
+    });
+  };
+
+  try {
+    const [original, padded] = await Promise.all([
+      getFrame(['scale=640:-1']), // Smaller original for preview
+      getFrame(['scale=1920:1080:force_original_aspect_ratio=decrease,pad=1920:1080:(ow-iw)/2:(oh-ih)/2:black', 'scale=640:360']) // Smaller padded preview
+    ]);
+    return { original, padded };
+  } catch (error: any) {
+    throw new Error('Failed to generate preview: ' + error.message);
+  }
 });
