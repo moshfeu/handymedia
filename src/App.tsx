@@ -243,7 +243,22 @@ const App: React.FC = () => {
                         <div className="card centered">
                             <div className="success-icon">✓</div>
                             <h2>Conversion Complete!</h2>
-                            <p id="output-path" className="path-display">{resultPath}</p>
+                            <p
+                                id="output-path"
+                                className="path-display clickable"
+                                tabIndex={0}
+                                role="button"
+                                onClick={() => resultPath && window.electronAPI.showInFolder(resultPath)}
+                                onKeyDown={(e) => {
+                                    if (e.key === 'Enter' || e.key === ' ') {
+                                        e.preventDefault();
+                                        if (resultPath) window.electronAPI.showInFolder(resultPath);
+                                    }
+                                }}
+                                title="Click to show in folder"
+                            >
+                                {resultPath}
+                            </p>
                             <button onClick={handleReset} className="btn-primary">Convert Another File</button>
                         </div>
                     </div>

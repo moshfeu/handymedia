@@ -254,6 +254,18 @@ label {
     border-radius: 8px;
     margin: 1.5rem 0;
     width: 100%;
+
+    &.clickable {
+        cursor: pointer;
+        transition: all 0.2s;
+        border: 1px solid transparent;
+
+        &:hover {
+            background: rgba(245, 158, 11, 0.1);
+            border-color: var(--border);
+            color: var(--accent);
+        }
+    }
 }
 
 .update-notification {

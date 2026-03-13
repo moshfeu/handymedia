@@ -1,4 +1,4 @@
-import { app, BrowserWindow, ipcMain, dialog } from 'electron';
+import { app, BrowserWindow, ipcMain, dialog, shell } from 'electron';
 import { autoUpdater } from 'electron-updater';
 import * as path from 'path';
 import { PassThrough } from 'stream';
@@ -71,6 +71,10 @@ ipcMain.on('resize-window', (event, width, height) => {
   if (win) {
     win.setSize(width, height, true);
   }
+});
+
+ipcMain.handle('show-in-folder', async (event, filePath) => {
+  shell.showItemInFolder(filePath);
 });
 
 app.whenReady().then(createWindow);

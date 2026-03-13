@@ -27,3 +27,4 @@
 
 ---
 **Note:** I will not commit or push any further changes unless explicitly requested.
+**Note:** The code and interface should always be fully accessible (e.g., keyboard navigation, ARIA roles, etc).

@@ -19,5 +19,6 @@ contextBridge.exposeInMainWorld('electronAPI', {
   },
   restartApp: () => ipcRenderer.invoke('restart-app'),
   generatePreview: (filePath: string) => ipcRenderer.invoke('generate-preview', filePath),
-  resizeWindow: (width: number, height: number) => ipcRenderer.send('resize-window', width, height)
+  resizeWindow: (width: number, height: number) => ipcRenderer.send('resize-window', width, height),
+  showInFolder: (filePath: string) => ipcRenderer.invoke('show-in-folder', filePath)
 });

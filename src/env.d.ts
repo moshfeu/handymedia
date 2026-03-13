@@ -11,5 +11,6 @@ declare interface Window {
     restartApp: () => Promise<void>;
     generatePreview: (filePath: string) => Promise<{ original: string; padded: string }>;
     resizeWindow: (width: number, height: number) => void;
+    showInFolder: (filePath: string) => Promise<void>;
   };
 }
