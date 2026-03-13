@@ -19,6 +19,20 @@ const App: React.FC = () => {
     };
   }, []);
 
+  useEffect(() => {
+    const handleKeyDown = (e: KeyboardEvent) => {
+      if (e.shiftKey && e.key.toLowerCase() === 'u') {
+        setUpdateStatus(prev => {
+          if (prev === 'none') return 'available';
+          if (prev === 'available') return 'downloaded';
+          return 'none';
+        });
+      }
+    };
+    window.addEventListener('keydown', handleKeyDown);
+    return () => window.removeEventListener('keydown', handleKeyDown);
+  }, []);
+
     useEffect(() => {
         const removeListener = window.electronAPI.onProgress((percent: number) => {
             if (percent !== undefined) {
@@ -88,7 +102,7 @@ const App: React.FC = () => {
         )}
             <header>
                 <div className="logo-container">
-                    <img src="logo.png" alt="HandyMedia Logo" className="app-logo" />
+                  <img src="logo.png" alt="HandyMedia Logo" className="app-logo" />
                 </div>
                 <h1>HandyMedia</h1>
           <div className="tool-intro">
